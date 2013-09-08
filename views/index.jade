@@ -53,6 +53,10 @@ block content
 					strong Reason:  
 					em(data-bind="text: errorMessage") 
 	///ko
+
 block script
+	script(src='/js/mapapi.js')
+	script(src='/js/mapui.js')
+	script(src='/js/controller.js')
 	script
 		$(function(){ko.applyBindings(new POIDistanceModel()); })
