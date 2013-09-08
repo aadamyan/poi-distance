@@ -40,17 +40,17 @@ function POIDistanceModel(){
 		mapAPI.getCurrentLocation(function(currentLoc){
 			mapAPI.geocode(self.address(), function(poiLoc){
 				if(!poiLoc.success){
-					handleError(poiLoc.reason);
+					return handleError(poiLoc.reason);
 				}
+				
 				self.destinationAddress(poiLoc.address)
 				mapUI.setDestination(poiLoc.location);
 
 				mapAPI.calculateDistance(currentLoc.location, poiLoc.location, function(result){
 					if(!result.success){
-						handleError(result.reason, true);
-						self.loading(false)
-						return self.errorMessage(result.reason);
+						return handleError(result.reason, true);
 					}
+
 					self.distance(result.distance.text);
 					self.loading(false);
 				})
