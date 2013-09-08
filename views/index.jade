@@ -1,26 +1,58 @@
 extends layout
 block content
-	.row#panel
-		.col-lg-12
+	//ko if: geolocationSupported()
+	.row
+		.col-lg-8
 			h1 How far is it?
 			.alert.alert-danger(data-bind="text: errorMessage, visible: errorMessage()", style="display: none")
 
 			form.form-inline(data-bind="submit: search")
-				.form-group.col-lg-12
+				.form-group
 					.input-group
 						input.form-control(type="textbox", data-bind="value: address", placeholder="enter address here")
 						span.input-group-btn
 							button.btn.btn-default(type="submit")
 								i.icon-search			
-
-				
 			h2
 				span(data-bind="text: destinationAddress")
 				| &nbsp;
-				span(data-bind="text: distance")
+				em(data-bind="text: distance")
 				i.icon-spin.icon-refresh(data-bind="visible: loading", style="display:none")
 			#map-canvas
 
+		.col-lg-4(data-bind="with: history")
+			h3 
+				i.icon-time  
+				| Search history
+			.well
+				form.form-inline(data-bind="submit: search")
+					.form-group
+						.input-group
+							input.form-control(type="textbox", data-bind="value: searchQuery", placeholder="search in history")
+							span.input-group-btn
+								button.btn.btn-default(type="submit")
+									i.icon-search
+				h5(data-bind="visible: noResultsFound", style="display:none") nothing found
+				h5(data-bind="visible: history() && history().length", style="display:none") found 
+					strong(data-bind="text: history().length")  
+					|  results
+				.list-group(data-bind="foreach: history")
+					a.list-group-item(href="#", data-bind="click: $root.search.bind($data, false)")
+						em( data-bind="text: query")
+						br
+						i.icon-map-marker  
+						small(data-bind="text: address")
+	///ko
+	//ko ifnot: geolocationSupported()
+	.row
+		.col-lg-12
+			p
+				.alert.alert-danger 
+					strong Sorry, we were unable to find your current location! 
+					br
+					strong Reason:  
+					em(data-bind="text: errorMessage") 
+	///ko
 block script
 	script
-		$(function(){ko.applyBindings(new POIDistanceModel(), document.getElementById('panel')); })
+		$(function(){ko.applyBindings(new POIDistanceModel()); })
