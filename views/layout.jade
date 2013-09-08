@@ -1,10 +1,20 @@
 doctype 5
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/css/style.css')
-  body
-    block content
+	head
+		title= title
+		link(rel='stylesheet', href='/css/bootstrap.css')
+		link(rel='stylesheet', href='/css/font-awesome.min.css')
+		link(rel='stylesheet', href='/css/style.css')
+	body
+		.container
+			block content
 
-    script(src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false")
-    script(src="/js/main.js")
+
+		script(src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false")
+		script(src="/js/jquery-1.10.2.min.js")
+		script(src="/js/knockout-2.3.0.js")
+		script(src="/js/mapapi.js")
+		script(src="/js/mapui.js")
+		script(src="/js/controller.js")
+		block script
+

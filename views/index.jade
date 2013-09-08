@@ -1,10 +1,26 @@
 extends layout
-
 block content
-  h1= title
-  p Welcome to #{title}
-  #panel
-    input#address(type="textbox")
-    input(type="button", value="Geocode", onclick="calculate()")
-    h3#distance 0.0 km
-    #map-canvas
+	.row#panel
+		.col-lg-12
+			h1 How far is it?
+			.alert.alert-danger(data-bind="text: errorMessage, visible: errorMessage()", style="display: none")
+
+			form.form-inline(data-bind="submit: search")
+				.form-group.col-lg-12
+					.input-group
+						input.form-control(type="textbox", data-bind="value: address", placeholder="enter address here")
+						span.input-group-btn
+							button.btn.btn-default(type="submit")
+								i.icon-search			
+
+				
+			h2
+				span(data-bind="text: destinationAddress")
+				| &nbsp;
+				span(data-bind="text: distance")
+				i.icon-spin.icon-refresh(data-bind="visible: loading", style="display:none")
+			#map-canvas
+
+block script
+	script
+		$(function(){ko.applyBindings(new POIDistanceModel(), document.getElementById('panel')); })
