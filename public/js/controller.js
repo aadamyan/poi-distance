@@ -21,6 +21,15 @@ function POIDistanceModel(){
 		mapUI.setCurrentLocation(currentLocation);
 	})
 
+	function handleError(message, onlyDistance){
+		self.loading(false);
+		self.errorMessage(message);
+		if(onlyDistance)
+			return self.distance('');
+		self.distance('');
+		self.address('');
+	}
+
 	self.search = function(){
 		self.errorMessage('');
 		if(!self.address()){
@@ -31,17 +40,18 @@ function POIDistanceModel(){
 		mapAPI.getCurrentLocation(function(currentLoc){
 			mapAPI.geocode(self.address(), function(poiLoc){
 				if(!poiLoc.success){
-					self.loading(false);
-					return self.errorMessage(poiLoc.reason);
+					handleError(poiLoc.reason);
 				}
 				self.destinationAddress(poiLoc.address)
+				mapUI.setDestination(poiLoc.location);
+
 				mapAPI.calculateDistance(currentLoc.location, poiLoc.location, function(result){
 					if(!result.success){
+						handleError(result.reason, true);
 						self.loading(false)
 						return self.errorMessage(result.reason);
 					}
 					self.distance(result.distance.text);
-					mapUI.setDestination(poiLoc.location);
 					self.loading(false);
 				})
 			})	

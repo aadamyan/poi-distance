@@ -42,7 +42,7 @@ function MapAPI(){
 			if(distance.status == google.maps.DistanceMatrixStatus.OK){
 				cb({success: true, distance: distance.distance});
 			}else{
-				cb({success: false, reason: distance.status});
+				cb({success: false, reason: 'Sorry, we couldn\'t calculate the distance', status: distance.status});
 			}
 
 		});
@@ -51,10 +51,9 @@ function MapAPI(){
 	self.geocode = function(address, cb){
 		geocoder.geocode( { 'address': address}, function(results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
-				console.log(results);
-				cb({success: true, location: results[0].geometry.location, address: results[0].formatted_address});        
+				cb({success: true, location: results[0].geometry.location, address: results[0].formatted_address, raw: results});        
 			} else {
-				cb({success: false, reason: status});
+				cb({success: false, reason: 'Sorry, we couldn\'t find anything', status: status});
 			}
 		});
 	}
