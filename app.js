@@ -3,10 +3,11 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var routes = require('./routes');
-var http = require('http');
-var path = require('path');
+var express = require('express')
+  , routes = require('./routes')
+  , http = require('http')
+  , path = require('path')
+  , middlewares = require('./middlewares');
 
 var app = express();
 
@@ -18,6 +19,8 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(express.cookieParser());
+app.use(middlewares.initUser);
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -25,6 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+
 
 app.get('/', routes.index);
 
